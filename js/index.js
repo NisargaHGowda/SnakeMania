@@ -13,6 +13,38 @@ let score = 0;
 let lastPaintTime = 0;
 let snakeArr = [{ x: 1, y: 1 }];
 let food = { x: 6, y: 7, color: getRandomDarkColor() };
+let startX, startY, endX, endY;
+
+// Detect touch start
+document.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+});
+
+// Detect touch end and determine direction
+document.addEventListener("touchend", (e) => {
+    endX = e.changedTouches[0].clientX;
+    endY = e.changedTouches[0].clientY;
+
+    let diffX = endX - startX;
+    let diffY = endY - startY;
+
+    // Detect swipe direction (horizontal vs vertical)
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 0 && inputDir.x !== -1) {
+            inputDir = { x: 1, y: 0 }; // Swipe Right
+        } else if (diffX < 0 && inputDir.x !== 1) {
+            inputDir = { x: -1, y: 0 }; // Swipe Left
+        }
+    } else {
+        if (diffY > 0 && inputDir.y !== -1) {
+            inputDir = { x: 0, y: 1 }; // Swipe Down
+        } else if (diffY < 0 && inputDir.y !== 1) {
+            inputDir = { x: 0, y: -1 }; // Swipe Up
+        }
+    }
+});
+
 
 // UI Elements
 const board = document.getElementById("board");

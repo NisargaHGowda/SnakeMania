@@ -49,8 +49,45 @@
 .head {
     background-color: #2ecc71; /* Brighter green for head */
     border-radius: 10px;
-    position: relative; /* Needed for absolute positioning of eyes */
+    position: relative; /* Needed for absolute positioning */
 }
+
+/* Snake Mouth */
+.mouth {
+    position: absolute;
+    width: 10px;
+    height: 5px;
+    background-color: black;
+    border-radius: 50%;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: height 0.2s ease-in-out; /* Mouth animation */
+}
+
+/* Snake Tongue */
+.tongue {
+    position: absolute;
+    width: 4px;
+    height: 10px;
+    background-color: red;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Open mouth when eating */
+.eating .mouth {
+    height: 10px; /* Make the mouth open wider */
+}
+
+.eating .tongue {
+    opacity: 1; /* Make the tongue visible */
+}
+
 
 /* Snake Eyes */
 .eye {
@@ -88,6 +125,39 @@
     display: flex;
     gap: 15px;
 }
+
+.food {
+    animation: bounce 1s infinite alternate;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes circling-rings {
+    0% {
+        box-shadow: 0 0 0px rgba(255, 255, 255, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
+    }
+    100% {
+        box-shadow: 0 0 0px rgba(255, 255, 255, 0.7);
+    }
+}
+
+.dizzy {
+    position: relative;
+    animation: circling-rings 0.5s infinite alternate ease-in-out;
+    border-radius: 50%;
+}
+
 
 button {
     padding: 10px 20px;

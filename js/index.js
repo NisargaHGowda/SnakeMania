@@ -80,6 +80,27 @@ document.getElementById("endBtn").addEventListener("click", () => {
     board.innerHTML = "";
 });
 
+function startGame() {
+    console.log("Game Started!");
+    gameActive = true;
+    score = 0;
+    speed = 5;
+    snakeArr = [{ x: 1, y: 1 }];
+    inputDir = { x: 1, y: 0 };
+    food = { x: Math.floor(Math.random() * 16) + 1, y: Math.floor(Math.random() * 16) + 1 };
+
+    // Remove dizzy effect
+    let snakeHead = document.querySelector(".head");
+    if (snakeHead) {
+        snakeHead.classList.remove("dizzy");
+    }
+
+    board.innerHTML = "";
+    musicSound.play();
+    window.requestAnimationFrame(main);
+}
+
+
 // Game Loop
 function main(ctime) {
     if (!gameActive) return;
@@ -97,6 +118,7 @@ function isCollide(snake) {
         }
     }
     if (snake[0].x >= 18 || snake[0].x <= 0 || snake[0].y >= 18 || snake[0].y <= 0) {
+        console.log("Snake hit the wall!");
         return true;
     }
     return false;
@@ -107,16 +129,28 @@ let highScore = localStorage.getItem("highScore") ? JSON.parse(localStorage.getI
 highscoreBox.innerHTML = "HighScore: " + highScore;
 
 function gameOver() {
+    console.log("Game Over!");
     gameActive = false;
+
+    // Add circling rings effect to the snake's head
+    let snakeHead = document.querySelector(".head");
+    if (snakeHead) {
+        snakeHead.classList.add("dizzy");
+    }
+
+    // Play game over sound
     gameOverSound.play();
 
+    // Store high score
     if (score > highScore) {
         highScore = score;
         localStorage.setItem("highScore", JSON.stringify(highScore));
-        highscoreBox.innerHTML = "HighScore: " + highScore;
+        document.getElementById("highscoreBox").innerHTML = "HighScore: " + highScore;
     }
 
-    alert("Game Over! Click Play to restart.");
+    setTimeout(() => {
+        alert("Game Over! Click Play to restart.");
+    }, 500);
 }
 
 // Game Engine
@@ -183,6 +217,24 @@ function gameEngine() {
 
             snakeElement.appendChild(leftEye);
             snakeElement.appendChild(rightEye);
+
+              // Add Mouth & Tongue
+              let mouth = document.createElement("div");
+              mouth.classList.add("mouth");
+  
+              let tongue = document.createElement("div");
+              tongue.classList.add("tongue");
+  
+              snakeElement.appendChild(mouth);
+              snakeElement.appendChild(tongue);
+  
+              // Open mouth when eating
+              if (snakeArr[0].x === food.x && snakeArr[0].y === food.y) {
+                  snakeElement.classList.add("eating");
+                  setTimeout(() => snakeElement.classList.remove("eating"), 300);
+              }
+
+
         } else {
             snakeElement.classList.add("snake");
         }
